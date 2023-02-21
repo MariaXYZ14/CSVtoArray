@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import * as csv from 'csv-parse';
+//import * as csv from 'csv-parse';
+import * as csv from 'csv-parse/sync';
 
 function CsvToArray(csv) {
   let array = csv.split("\\r\\n").map(function (line) {
@@ -16,6 +17,7 @@ export const ArrayConverter = () => {
     fetch(csvFilePath)
       .then(response => response.text())
       .then(data => {
+        console.log(data);
         csv.parse(data, {}, (err, output) => {
           if (err) {
             console.error(err);
