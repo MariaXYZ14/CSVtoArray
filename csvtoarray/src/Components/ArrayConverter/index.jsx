@@ -1,42 +1,21 @@
 import React, { useState, useEffect } from 'react';
-//import * as csv from 'csv-parse';
-import * as csv from 'csv-parse/sync';
-
-function CsvToArray(csv) {
-  let array = csv.split("\\r\\n").map(function (line) {
-    return line.split(",");
-  })
-  return array;
-}
+import * as Papa from 'papaparse'
 
 export const ArrayConverter = () => {
-  const [data, setData] = useState([]);
+  const [array, setArray] = useState([]);
 
   useEffect(() => {
-    const csvFilePath = './Mockups/testfile.csv';
-    fetch(csvFilePath)
-      .then(response => response.text())
-      .then(data => {
-        console.log(data);
-        csv.parse(data, {}, (err, output) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          setData(output);
-        });
-      });
+    fetch( './Mockups/testfile.csv' )
+            .then( response => response.text() )
+            .then( responseText => {
+              var data = Papa.parse(responseText);
+              setArray(data)
+              console.log('data:', data);
+            })
   }, []);
 
   return (
     <div>
-      {data.map((row, i) => (
-        <div key={i}>
-          {row.map((cell, j) => (
-            <span key={j}>{cell}</span>
-          ))}
-        </div>
-      ))}
     </div>
   );
 };
